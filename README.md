@@ -1,19 +1,26 @@
-# 🤖 Telegram AI Chatbot (Powered by OpenRouter + LLaMA)
+# Telegram AI Chatbot (Powered by OpenRouter + LLaMA)
 
-A simple, powerful Telegram AI chatbot built using **Python**, the **python-telegram-bot** library, and **OpenRouter API** (LLaMA model). The bot understands user input and responds intelligently using LLM (Large Language Model) inference.
+A simple, powerful Telegram AI chatbot built using Python, the python-telegram-bot library, and OpenRouter API (LLaMA model). The bot understands user input and responds intelligently using LLM (Large Language Model) inference.
 
----
+## Table of Contents
 
-## 🚀 Features
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Sample Questions](#sample-questions)
+- [Demo Screenshots](#demo-screenshots)
+- [Setup Instructions](#setup-instructions)
+- [Make It Always Online](#make-it-always-online)
+- [Project Structure](#project-structure)
+- [License](#license)
 
-- 🧠 AI-Powered responses (via LLaMA on OpenRouter)
-- 🤖 Telegram bot integration
-- 🌐 Easy deployment on Replit or locally via VS Code
-- ⚙️ Environment variable management using `.env`
+## Features
 
----
+- AI-Powered responses (via LLaMA on OpenRouter)
+- Telegram bot integration
+- Easy deployment on Replit or locally via VS Code
+- Environment variable management using .env
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - Python
 - [python-telegram-bot](https://python-telegram-bot.org/)
@@ -21,9 +28,7 @@ A simple, powerful Telegram AI chatbot built using **Python**, the **python-tele
 - asyncio
 - python-dotenv
 
----
-
-## 💡 Sample Questions You Can Ask
+## Sample Questions
 
 | Question | Response |
 |----------|----------|
@@ -33,9 +38,7 @@ A simple, powerful Telegram AI chatbot built using **Python**, the **python-tele
 | Can you act like a pirate and introduce yourself? | (Bot replies like a pirate) |
 | How does ChatGPT work in simple terms? | (Bot explains clearly) |
 
----
-
-### 🖼️ Demo Screenshots
+## Demo Screenshots
 
 | Sample Interaction     | Screenshot |
 |------------------------|------------|
@@ -43,9 +46,7 @@ A simple, powerful Telegram AI chatbot built using **Python**, the **python-tele
 | Fun Prompt (Pirate)    | <img src="demo/demo4.jpg.jpg" width="400"/> |
 | Poem Request           | <img src="demo/demo3.jpg.jpg" width="400"/> |
 
----
-
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. Clone the Repository
 
@@ -60,7 +61,7 @@ cd telegram-ai-chatbot
 pip install -r requirements.txt
 ```
 
-### 3. Create a `.env` File
+### 3. Create a .env File
 
 Create a file named `.env` in the root directory and add your keys:
 
@@ -75,16 +76,12 @@ OPENROUTER_API_KEY=your_openrouter_key
 python main.py
 ```
 
----
+## Make It Always Online
 
-## 🌐 Make It Always Online
+- UptimeRobot: Add your bot's public web URL (like from Flask server if hosted)
+- Replit: Use reserved VM or autoscale (Replit Pro)
 
-- **UptimeRobot:** Add your bot's public web URL (like from Flask server if hosted)
-- **Replit:** Use reserved VM or autoscale (Replit Pro)
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 telegram-ai-chatbot/
@@ -98,9 +95,7 @@ telegram-ai-chatbot/
 └── README.md
 ```
 
----
-
-## 📄 License
+## License
 
 MIT License
 
@@ -111,5 +106,3 @@ Copyright (c) 2025 Raushan Kumar
 
 Permission is hereby granted, free of charge, to any person obtaining a copy...
 ```
-
----
