@@ -20,7 +20,7 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 PORT = int(os.environ.get("PORT", 10000))
 WEBHOOK_PATH = f"/webhook/{TELEGRAM_TOKEN}"
-WEBHOOK_URL = f"https://YOUR-RENDER-URL.onrender.com{WEBHOOK_PATH}"
+WEBHOOK_URL = f"https://telegram-ai-bot-8jc5.onrender.com{WEBHOOK_PATH}"
 
 # ───────── Handlers ─────────
 
