@@ -27,21 +27,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🤖 Groq AI Bot is ready!")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not GROQ_API_KEY:
-        await update.message.reply_text("❌ GROQ_API_KEY not found in ENV")
-        return
-
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json",
     }
 
     payload = {
-        "model": "llama3-8b-8192",
+        "model": "llama-3.1-8b-instant",
         "messages": [
-            {"role": "user", "content": update.message.text}
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": update.message.text},
         ],
         "max_tokens": 300,
+        "temperature": 0.7,
     }
 
     r = requests.post(
@@ -59,7 +57,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(reply)
     else:
         await update.message.reply_text(
-            f"❌ Groq error {r.status_code}\nCheck Render logs"
+            f"❌ Groq error {r.status_code}"
         )
 
 
