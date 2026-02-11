@@ -27,7 +27,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🤖 Groq AI Bot is ready!")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_text = update.message.text
+    if not GROQ_API_KEY:
+        await update.message.reply_text("❌ GROQ_API_KEY not found in ENV")
+        return
 
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
@@ -35,40 +37,37 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
 
     payload = {
-        "model": "llama3-8b-8192",  # ✅ FREE + FAST
+        "model": "llama3-8b-8192",
         "messages": [
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": user_text},
+            {"role": "user", "content": update.message.text}
         ],
-        "temperature": 0.7,
         "max_tokens": 300,
     }
 
-    try:
-        r = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=60,
+    r = requests.post(
+        "https://api.groq.com/openai/v1/chat/completions",
+        headers=headers,
+        json=payload,
+        timeout=60,
+    )
+
+    print("STATUS:", r.status_code)
+    print("BODY:", r.text)
+
+    if r.status_code == 200:
+        reply = r.json()["choices"][0]["message"]["content"]
+        await update.message.reply_text(reply)
+    else:
+        await update.message.reply_text(
+            f"❌ Groq error {r.status_code}\nCheck Render logs"
         )
-
-        if r.status_code == 200:
-            reply = r.json()["choices"][0]["message"]["content"]
-            await update.message.reply_text(reply)
-        else:
-            print(r.text)
-            await update.message.reply_text("⚠️ AI error. Try again.")
-
-    except Exception as e:
-        print(e)
-        await update.message.reply_text("⚠️ Server error.")
 
 
 async def webhook(request):
-    app = request.app["tg_app"]
+    tg_app = request.app["tg_app"]
     data = await request.json()
-    update = Update.de_json(data, app.bot)
-    await app.process_update(update)
+    update = Update.de_json(data, tg_app.bot)
+    await tg_app.process_update(update)
     return web.Response(text="ok")
 
 
