@@ -11,14 +11,12 @@ from telegram.ext import (
     filters,
 )
 
-# ========= ENV =========
 load_dotenv()
 
 BOT_TOKEN = os.getenv("TELEGRAM_TOKEN")
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 PORT = int(os.environ.get("PORT", 10000))
-
 BASE_URL = "https://telegram-ai-bot-8jc5.onrender.com"
 WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
 WEBHOOK_URL = BASE_URL + WEBHOOK_PATH
@@ -29,38 +27,31 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Hi! I am your AI bot 🙂")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text
+    user_text = update.message.text
 
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-    }
+    url = (
+        "https://generativelanguage.googleapis.com/v1beta/models/"
+        f"gemini-pro:generateContent?key={GEMINI_API_KEY}"
+    )
 
     payload = {
-        "model": "mistralai/mistral-7b-instruct:free",  # ✅ MOST STABLE FREE MODEL
-        "messages": [{"role": "user", "content": text}],
-        "max_tokens": 200,
+        "contents": [
+            {"parts": [{"text": user_text}]}
+        ]
     }
 
     try:
-        r = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=60,
-        )
-
-        print("STATUS:", r.status_code)
-        print("RESPONSE:", r.text)
+        r = requests.post(url, json=payload, timeout=60)
 
         if r.status_code == 200:
-            reply = r.json()["choices"][0]["message"]["content"]
+            reply = r.json()["candidates"][0]["content"]["parts"][0]["text"]
             await update.message.reply_text(reply)
         else:
-            await update.message.reply_text("⚠️ AI error. Please try later.")
+            print(r.text)
+            await update.message.reply_text("⚠️ AI error. Try again.")
 
     except Exception as e:
-        print("EXCEPTION:", e)
+        print(e)
         await update.message.reply_text("⚠️ Server error.")
 
 
@@ -78,7 +69,7 @@ async def on_startup(app):
     await tg_app.initialize()
     await tg_app.bot.delete_webhook(drop_pending_updates=True)
     await tg_app.bot.set_webhook(WEBHOOK_URL)
-    print("✅ Webhook set:", WEBHOOK_URL)
+    print("Webhook set")
 
 
 async def on_cleanup(app):
