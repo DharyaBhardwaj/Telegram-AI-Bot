@@ -33,8 +33,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     url = (
         "https://generativelanguage.googleapis.com/v1/models/"
-        f"gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+        "gemini-1.5-flash:generateContent"
     )
+
+    headers = {
+        "Content-Type": "application/json"
+    }
 
     payload = {
         "contents": [
@@ -47,7 +51,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
 
     try:
-        r = requests.post(url, json=payload, timeout=60)
+        r = requests.post(
+            url,
+            headers=headers,
+            params={"key": GEMINI_API_KEY},
+            json=payload,
+            timeout=60
+        )
 
         print("STATUS:", r.status_code)
         print("RESPONSE:", r.text)
