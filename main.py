@@ -32,24 +32,30 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text
 
     url = (
-        "https://generativelanguage.googleapis.com/v1beta/models/"
-        f"gemini-pro:generateContent?key={GEMINI_API_KEY}"
+        "https://generativelanguage.googleapis.com/v1/models/"
+        f"gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     )
 
     payload = {
         "contents": [
-            {"parts": [{"text": user_text}]}
+            {
+                "parts": [
+                    {"text": user_text}
+                ]
+            }
         ]
     }
 
     try:
         r = requests.post(url, json=payload, timeout=60)
 
+        print("STATUS:", r.status_code)
+        print("RESPONSE:", r.text)
+
         if r.status_code == 200:
             reply = r.json()["candidates"][0]["content"]["parts"][0]["text"]
             await update.message.reply_text(reply)
         else:
-            print("Gemini error:", r.text)
             await update.message.reply_text("⚠️ AI error. Try again later.")
 
     except Exception as e:
@@ -71,7 +77,7 @@ async def on_startup(app):
     await tg_app.initialize()
     await tg_app.bot.delete_webhook(drop_pending_updates=True)
     await tg_app.bot.set_webhook(WEBHOOK_URL)
-    print("Webhook set")
+    print("✅ Webhook set")
 
 
 async def on_cleanup(app):
