@@ -11,12 +11,14 @@ from telegram.ext import (
     filters,
 )
 
+# ========= ENV =========
 load_dotenv()
 
 BOT_TOKEN = os.getenv("TELEGRAM_TOKEN")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 PORT = int(os.environ.get("PORT", 10000))
+
 BASE_URL = "https://telegram-ai-bot-8jc5.onrender.com"
 WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
 WEBHOOK_URL = BASE_URL + WEBHOOK_PATH
@@ -47,11 +49,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply = r.json()["candidates"][0]["content"]["parts"][0]["text"]
             await update.message.reply_text(reply)
         else:
-            print(r.text)
-            await update.message.reply_text("⚠️ AI error. Try again.")
+            print("Gemini error:", r.text)
+            await update.message.reply_text("⚠️ AI error. Try again later.")
 
     except Exception as e:
-        print(e)
+        print("Exception:", e)
         await update.message.reply_text("⚠️ Server error.")
 
 
